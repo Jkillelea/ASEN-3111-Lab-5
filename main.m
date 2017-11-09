@@ -45,5 +45,32 @@ for e = [5, 1, 1/10]
   scatter(x_e, e, 'ro');
   fprintf('%.1f%% error: %d points\n', e, ceil(x_e));
 end
-
 print('n_vs_err', '-dpng');
+
+% problem 2 (or 3, depending on how you count)
+AR_range = [4, 6, 8, 10];
+taper_range = linspace(0, 1, 100);
+e_vals = zeros(length(AR_range), length(taper_range));
+for AR = AR_range
+  for t = taper_range
+    % b = 20; % ft
+    % c_r = 2*b/(AR*(1+t));
+    c_r = 6;
+    c_t = t*c_r;
+    b = AR*((1+t)*c_r)/2;
+
+    % lift slope = 2pi, zero twist, alpha_L0 = 0, alpha = 5, N = 50
+    [e, ~, ~] = PLLT(b, 2*pi, 2*pi, c_t, c_r, 0, 0, 5, 5, 50);
+    e_vals(AR == AR_range, t == taper_range) = e;
+  end
+end
+
+figure; hold on;
+xlabel('Taper Ratio C_t/C_r');
+ylabel('Span efficiency');
+for AR = AR_range
+  plot(taper_range, e_vals(AR == AR_range, :), ...
+       'DisplayName', sprintf('AR = %d', AR));
+end
+legend('show', 'location', 'south')
+print('e_vs_ar', '-dpng');
