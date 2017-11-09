@@ -19,6 +19,8 @@ N = 1000;
 % find true e, cL, cDi
 [e_true, c_L_true, c_Di_true] = PLLT(b, a0_t, a0_r, c_t, c_r, aero_t, aero_r, geo_t, geo_r, 2000);
 
+fprintf('Wing 1: e %f, Cl %f, Cdi %f\n', e_true, c_L_true, c_Di_true);
+
 % computer percent error for N values below
 N_range = [2, 5, 7, 10, 15, 20, 25];
 errs = zeros(1, length(N_range));
@@ -53,11 +55,11 @@ taper_range = linspace(0, 1, 100);
 e_vals = zeros(length(AR_range), length(taper_range));
 for AR = AR_range
   for t = taper_range
-    % b = 20; % ft
+    % b = 20; % ft, fixed
     % c_r = 2*b/(AR*(1+t));
-    c_r = 6;
-    c_t = t*c_r;
+    c_r = 6; % ft, fixed
     b = AR*((1+t)*c_r)/2;
+    c_t = t*c_r;
 
     % lift slope = 2pi, zero twist, alpha_L0 = 0, alpha = 5, N = 50
     [e, ~, ~] = PLLT(b, 2*pi, 2*pi, c_t, c_r, 0, 0, 5, 5, 50);
@@ -65,7 +67,7 @@ for AR = AR_range
   end
 end
 
-figure; hold on;
+figure; grid on; hold on;
 xlabel('Taper Ratio C_t/C_r');
 ylabel('Span efficiency');
 for AR = AR_range
