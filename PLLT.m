@@ -25,8 +25,7 @@ function [e, c_L, c_Di] = PLLT(b, a0_t, a0_r, c_t, c_r, aero_t, aero_r, geo_t, g
   alpha  = @(t) geo_r   + (geo_t - geo_r)*cos(t);  % geometric angle of attack
                                                    % (what we're flying at)
   % the theta range
-  % thetas = linspace(0.1, pi/2, N); % half the wing
-  thetas = (1:N)*pi/(2*N);
+  thetas = (1:N)*pi/(2*N); % half the wing
 
   % A1, A3, A5 ...
   nvals = 1:2*N;
